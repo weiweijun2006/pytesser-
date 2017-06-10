@@ -1,0 +1,43 @@
+import pytesseract
+from PIL import Image, ImageEnhance
+def print_hex(im):#分析数据，查找颜色分布
+    his = im.histogram()
+    values = {}
+    for i in range(256):
+        values[i] = his[i]
+    for j,k in sorted(values.items(),key=lambda x:x[1],reverse = True)[:10]:
+        print (j,k)
+def img_test(im):#将颜色浅的去除，颜色深的加深
+    temp = {}
+    im2 = Image.new("L",im.size,255)
+    for x in range(im.size[1]):
+        for y in range(im.size[0]):
+            pix = im.getpixel((y,x))
+            temp[pix] = pix
+            if pix<155: # these are the numbers to get
+                im2.putpixel((y,x),0)
+            else:
+                im2.putpixel((y,x),255)
+   # im2.show()
+    return im2
+
+
+L = image.convert('L')   #转化为灰度图
+L.show()
+im=ImageEnhance.Contrast(L).enhance(10)
+im.show()
+img_array=im.load()
+for data in img_array:
+    print(data)
+#print_hex(L)
+#L.show()
+#img_test(L)
+
+
+code = pytesseract.image_to_string(im)
+
+print (code)
+code = pytesseract.image_to_string(L)
+
+print (code)
+print ("ok")
